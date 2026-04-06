@@ -1,0 +1,39 @@
+import streamlit as st
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Logistic growth function
+def logistic_growth(N0, K, r, time_period):
+    t = np.linspace(0, time_period, 100)
+    N = K / (1 + ((K - N0) / N0) * np.exp(-r * t))
+    return t, N
+
+# App title
+st.title("📈 Corporate Hiring Growth Simulator")
+
+st.write("Simulate workforce growth using the logistic growth model.")
+
+# User inputs
+N0 = st.number_input("Initial Workforce (N0)", min_value=1.0, value=50.0)
+K = st.number_input("Carrying Capacity (K)", min_value=1.0, value=500.0)
+r = st.number_input("Growth Rate (r)", min_value=0.01, value=0.3)
+time_period = st.number_input("Time Period (Months)", min_value=1.0, value=24.0)
+
+# Generate graph
+if st.button("Generate Growth Graph"):
+    t, N = logistic_growth(N0, K, r, time_period)
+
+    # Plot
+    fig, ax = plt.subplots()
+    ax.plot(t, N, color='blue', label='Workforce Growth')
+    ax.set_xlabel("Time (Months)")
+    ax.set_ylabel("Employees")
+    ax.set_title("Corporate Hiring Growth (Logistic Model)")
+    ax.legend()
+    ax.grid(True)
+
+    # Show plot in Streamlit
+    st.pyplot(fig)
+
+    # Final output
+    st.success(f"Final Workforce after {time_period} months: {N[-1]:.2f}")
